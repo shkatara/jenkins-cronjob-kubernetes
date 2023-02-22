@@ -17,6 +17,9 @@ spec:
           - image: docker.io/shkatara/kubernetes_cron_host:latest
             name: host-job
             resources: {}
+            envFrom: 
+              - configMapRef:  
+                  name: myconfig
           restartPolicy: OnFailure
   schedule: '*/1 * * * *'
 status: {}

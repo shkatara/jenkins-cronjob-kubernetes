@@ -17,9 +17,21 @@ pipeline {
 
         stage('Getting Started...'){
           steps {
-             sh ' echo Hello, now will start your build and deployment.'
+             sh ' echo Hello, now will start your deployment.'
         }
     }
+
+
+        stage('Generating Configmap containing host ip / hostname'){
+          steps {
+            sh '''
+                 oc project $DEPLOY_PROJECT
+                 oc create configmap myconfig --from-literal=HOST=www.google.com
+               '''
+
+          }
+    }
+
 
         stage('Starting Build and Deployment') {
           steps {
