@@ -1,0 +1,22 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  creationTimestamp: null
+  name: host-job
+spec:
+  jobTemplate:
+    metadata:
+      creationTimestamp: null
+      name: host-job
+    spec:
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          containers:
+          - image: docker.io/shkatara/kubernetes_cron_host:latest
+            name: host-job
+            resources: {}
+          restartPolicy: OnFailure
+  schedule: '*/1 * * * *'
+status: {}
