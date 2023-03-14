@@ -36,10 +36,9 @@ pipeline {
                   sh '''
                     oc project $DEPLOY_PROJECT
                     oc get cm myconfig
-                    oc get cm -o yaml myconfig
-                    oldHost=$(oc get cm myconfig -o yaml | grep HOST | cut -d':' -f 2)
-                    echo $oldHost
-                    echo ${HOSTNAME_CATCH}
+                    oldHost=$(oc get cm myconfig -o yaml | yq e '.data.HOST' -)
+                    echo old host is $oldHost
+                    echo new host is ${HOSTNAME_CATCH}
                     oc get configmap myconfig -o yaml |  sed  "s/$oldHost/${HOSTNAME_CATCH}/g" | oc replace -f -
                   '''
                 }
