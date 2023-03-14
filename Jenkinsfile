@@ -30,17 +30,17 @@ pipeline {
 
         stage('Generating Configmap containing host ip / hostname'){
           steps {
-            echo 'Hello World'
+              echo "Hello World ${HOSTNAME_CATCH}"
               script {
                 try {
-                  sh '''
+                  sh """
                     oc project $DEPLOY_PROJECT
                     oc get cm myconfig
                     oldHost=$(oc get cm myconfig -o yaml | yq e '.data.HOST' -)
                     echo old host is $oldHost
                     echo new host is "${HOSTNAME_CATCH}"
                     oc get configmap myconfig -o yaml |  sed  "s/$oldHost/${HOSTNAME_CATCH}/g" | oc replace -f -
-                  '''
+                  """
                 }
                 catch (Exception e) {
                     sh '''
