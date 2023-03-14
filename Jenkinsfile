@@ -52,15 +52,20 @@ pipeline {
         }
         stage('Starting Build and Deployment') {
           steps {
-            sh '''
-                 oc project $DEPLOY_PROJECT
-                 oc get cronjob host-job
-                 if [ $? != 0 ]
-                 then
-                   oc -f cronjob.yaml create
-                 fi
-               '''
-
+            script {
+              try {
+                sh '''
+                  oc project $DEPLOY_PROJECT
+                  oc get cronjob host-job
+                '''
+              }
+              catch ( Exception e ) {
+                sh '''
+                  oc project $DEPLOY_PROJECT
+                  oc create -f cronjob.yaml 
+                  '''
+              }
+            }    
           }
         } 
         stage('All Done'){
