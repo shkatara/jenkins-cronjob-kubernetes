@@ -23,7 +23,7 @@ pipeline {
             }
           }
           steps {
-              echo 'Hello ${HOSTNAME}'
+              echo "Hello ${HOSTNAME_TEST}"
           }  
         }    
       
