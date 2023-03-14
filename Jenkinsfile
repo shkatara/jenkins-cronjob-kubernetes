@@ -30,7 +30,7 @@ pipeline {
 
 
         stage('Generating Configmap containing host ip / hostname'){
-            steps {
+            script {
                 try {
                   sh '''
                     oc project $DEPLOY_PROJECT
@@ -39,7 +39,7 @@ pipeline {
                     oc get configmap myconfig -o yaml |  sed  "s/$oldHost/${env.HOSTNAME}/g" | oc replace -f -
                   '''
                 }
-                catch (exc) {
+                catch (Exception e) {
                     sh '''
                     oc project $DEPLOY_PROJECT
                     oc create configmap myconfig --from-literal=HOST=${env.HOSTNAME}
