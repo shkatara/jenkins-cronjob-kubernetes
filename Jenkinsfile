@@ -19,7 +19,7 @@ pipeline {
             message "Please enter the hostname"
             ok "Yes, enter the hostname"
             parameters {
-              string(name: 'HOSTNAME',defaultValue: '', description: '')
+              string(name: 'HOSTNAME_TEST',defaultValue: '', description: '')
             }
           }
           steps {
@@ -29,7 +29,7 @@ pipeline {
       
         stage('Getting Started...'){
           steps {
-             sh  "echo Hello, now will start your deployment and the hostname is ${HOSTNAME}"
+             sh  "echo Hello, now will start your deployment and the hostname is ${HOSTNAME_TEST}"
           }
         }
 
@@ -43,13 +43,13 @@ pipeline {
                     oc project $DEPLOY_PROJECT
                     oc get cm myconfig
                     oldHost=$(oc get cm myconfig -o yaml | grep HOST  | cut -d':' -f 2)
-                    oc get configmap myconfig -o yaml |  sed  "s/$oldHost/${HOSTNAME}/g" | oc replace -f -
+                    oc get configmap myconfig -o yaml |  sed  "s/$oldHost/${HOSTNAME_TEST}/g" | oc replace -f -
                   '''
                 }
                 catch (Exception e) {
                     sh '''
                     oc project $DEPLOY_PROJECT
-                    oc create configmap myconfig --from-literal=HOST=${HOSTNAME}
+                    oc create configmap myconfig --from-literal=HOST=${HOSTNAME_TEST}
                     '''
                 }
               }    
