@@ -24,7 +24,7 @@ pipeline {
       
         stage('Getting Started...'){
           steps {
-             sh ' echo Hello, now will start your deployment and the hostname is' ${env.HOSTNAME}
+             sh  "echo Hello, now will start your deployment and the hostname is ${env.HOSTNAME}"
           }
         }
 
