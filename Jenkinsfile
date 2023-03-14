@@ -23,14 +23,7 @@ pipeline {
             }
           }
           steps {
-              echo "Hello ${HOSTNAME_CATCH}"
-          }  
-        }    
-      
-
-        stage('Generating Configmap containing host ip / hostname'){
-          steps {
-              echo "Hello World"
+            echo "Hello ${HOSTNAME_CATCH}"
               script {
                 try {
                   sh '''
@@ -48,9 +41,12 @@ pipeline {
                     oc create configmap myconfig --from-literal=HOST=${HOSTNAME_CATCH}
                     '''
                 }
-              }    
-          }    
-        }
+              }
+          }  
+        }    
+      
+
+        
         stage('Starting Build and Deployment') {
           steps {
             script {
