@@ -38,7 +38,7 @@ pipeline {
                     oc get cm myconfig
                     oldHost=$(oc get cm myconfig -o yaml | yq e '.data.HOST' -)
                     echo old host is $oldHost
-                    echo new host is "${HOSTNAME_CATCH}"
+                    echo new host is '${HOSTNAME_CATCH}'
                     oc get configmap myconfig -o yaml |  sed  "s/$oldHost/${HOSTNAME_CATCH}/g" | oc replace -f -
                   '''
                 }
