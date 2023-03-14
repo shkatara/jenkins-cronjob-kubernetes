@@ -30,7 +30,9 @@ pipeline {
 
 
         stage('Generating Configmap containing host ip / hostname'){
-            script {
+          steps {
+            echo 'Hello World'
+              script {
                 try {
                   sh '''
                     oc project $DEPLOY_PROJECT
@@ -45,7 +47,8 @@ pipeline {
                     oc create configmap myconfig --from-literal=HOST=${env.HOSTNAME}
                     '''
                 }
-            }    
+              }    
+          }    
         }
         stage('Starting Build and Deployment') {
           steps {
