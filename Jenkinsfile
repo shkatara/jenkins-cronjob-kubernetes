@@ -30,7 +30,7 @@ pipeline {
 
         stage('Generating Configmap containing host ip / hostname'){
           steps {
-              echo "Hello World ${HOSTNAME_CATCH}"
+              echo "Hello World"
               script {
                 try {
                   sh '''
