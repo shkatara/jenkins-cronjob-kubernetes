@@ -36,6 +36,7 @@ pipeline {
                   sh '''
                     oc project $DEPLOY_PROJECT
                     oc get cm myconfig
+                    oc get cm -o yaml myconfig
                     oldHost=$(oc get cm myconfig -o yaml | grep HOST | cut -d':' -f 2)
                     echo $oldHost
                     echo ${HOSTNAME_CATCH}
