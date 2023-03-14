@@ -21,7 +21,10 @@ pipeline {
             parameters {
               string(name: 'HOSTNAME',defaultValue: '', description: '')
             }
-          }        
+          }
+          steps {
+              echo 'Hello ${HOSTNAME}'
+          }  
         }    
       
         stage('Getting Started...'){
