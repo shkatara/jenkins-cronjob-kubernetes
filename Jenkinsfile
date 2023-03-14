@@ -34,7 +34,7 @@ pipeline {
             sh '''
                  oc project $DEPLOY_PROJECT
                  oc get cm myconfig
-                 if [ $? == 0 ]
+                 if [ $? != 0 ]
                  then
                    oc create configmap myconfig --from-literal=HOST=${env.HOSTNAME}
                  else
