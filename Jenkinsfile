@@ -44,7 +44,7 @@ pipeline {
                 catch (Exception e) {
                     sh '''
                     oc project $DEPLOY_PROJECT
-                    oc create configmap myconfig --from-literal=HOST=${env.HOSTNAME}
+                    oc create configmap myconfig --from-literal=HOST=www.google.com
                     '''
                 }
               }    
