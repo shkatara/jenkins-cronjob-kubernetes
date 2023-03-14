@@ -15,16 +15,18 @@ pipeline {
     stages {
  
         stage('Prompt for Inputs'){
-          steps {
-            script {
-              env.HOSTNAME = input message: 'Please enter the hostname to check for',parameters: [string(defaultValue: '',description: '', name: 'Username')]
+          input {
+            message "Please enter the hostname"
+            ok "Yes, enter the hostname"
+            parameters {
+              string(name: 'HOSTNAME',defaultValue: '', description: '')
             }
-          }
+          }        
         }    
       
         stage('Getting Started...'){
           steps {
-             sh  "echo Hello, now will start your deployment and the hostname is ${env.HOSTNAME}"
+             sh  "echo Hello, now will start your deployment and the hostname is ${HOSTNAME}"
           }
         }
 
@@ -38,13 +40,13 @@ pipeline {
                     oc project $DEPLOY_PROJECT
                     oc get cm myconfig
                     oldHost=$(oc get cm myconfig -o yaml | grep HOST  | cut -d':' -f 2)
-                    oc get configmap myconfig -o yaml |  sed  "s/$oldHost/${env.HOSTNAME}/g" | oc replace -f -
+                    oc get configmap myconfig -o yaml |  sed  "s/$oldHost/${HOSTNAME}/g" | oc replace -f -
                   '''
                 }
                 catch (Exception e) {
                     sh '''
                     oc project $DEPLOY_PROJECT
-                    oc create configmap myconfig --from-literal=HOST=www.google.com
+                    oc create configmap myconfig --from-literal=HOST=${HOSTNAME}
                     '''
                 }
               }    
