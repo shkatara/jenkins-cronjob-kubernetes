@@ -30,20 +30,22 @@ pipeline {
 
 
         stage('Generating Configmap containing host ip / hostname'){
-            try {
-                sh '''
-                oc project $DEPLOY_PROJECT
-                oc get cm myconfig
-                oldHost=$(oc get cm myconfig -o yaml | grep HOST  | cut -d':' -f 2)
-                oc get configmap myconfig -o yaml |  sed  "s/$oldHost/${env.HOSTNAME}/g" | oc replace -f -
-                '''
-            }
-            catch (exc) {
-                sh '''
-                oc project $DEPLOY_PROJECT
-                oc create configmap myconfig --from-literal=HOST=${env.HOSTNAME}
-                '''
-            } 
+            steps {
+                try {
+                  sh '''
+                    oc project $DEPLOY_PROJECT
+                    oc get cm myconfig
+                    oldHost=$(oc get cm myconfig -o yaml | grep HOST  | cut -d':' -f 2)
+                    oc get configmap myconfig -o yaml |  sed  "s/$oldHost/${env.HOSTNAME}/g" | oc replace -f -
+                  '''
+                }
+                catch (exc) {
+                    sh '''
+                    oc project $DEPLOY_PROJECT
+                    oc create configmap myconfig --from-literal=HOST=${env.HOSTNAME}
+                    '''
+                }
+            }    
         }
         stage('Starting Build and Deployment') {
           steps {
