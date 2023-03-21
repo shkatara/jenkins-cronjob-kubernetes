@@ -21,6 +21,9 @@ pipeline {
               string(name: 'HOSTNAME_CATCH',defaultValue: '', description: '')
             }
           }
+          steps {
+              sh " echo ${HOSTNAME_CATCH}"   
+          }
         }
         stage('Prompt for Inputs of PORT'){
           input {
@@ -30,6 +33,9 @@ pipeline {
               string(name: 'PORT_CATCH',defaultValue: '', description: '')
             }
           }
+          steps {
+              sh " echo ${PORT_CATCH}"   
+          } 
         }
         stage('Prompt for Inputs of Minutes'){
           input {
@@ -39,6 +45,9 @@ pipeline {
               string(name: 'MIN_CATCH',defaultValue: '', description: '')
             }
           }
+          steps {
+              sh " echo ${MIN_CATCH}"   
+          }  
         }
         stage('Deploying and configuring cronjob'){
           steps {
