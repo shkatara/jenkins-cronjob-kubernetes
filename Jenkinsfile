@@ -13,44 +13,30 @@ pipeline {
     }
 
     stages {
-        stage('Prompt for Inputs of HOSTNAME'){
-          input {
+      stage('Prompt for Inputs'){
+         input {
             message "Please enter the hostname"
             ok "Yes, enter the hostname"
             parameters {
               string(name: 'HOSTNAME_CATCH',defaultValue: '', description: '')
             }
-          }
-          steps {
-              sh " echo ${HOSTNAME_CATCH}"   
-          }
-        }
-        stage('Prompt for Inputs of PORT'){
-          input {
+         }
+         input {
             message "Please enter the port number"
             ok "Yes, enter the port number"
             parameters {
               string(name: 'PORT_CATCH',defaultValue: '', description: '')
             }
-          }
-          steps {
-              sh " echo ${PORT_CATCH}"   
-          } 
-        }
-        stage('Prompt for Inputs of Minutes'){
-          input {
+         }    
+         input {
             message "Please enter the frequency"
             ok "Yes, enter the frequency"
             parameters {
               string(name: 'MIN_CATCH',defaultValue: '', description: '')
             }
-          }
-          steps {
-              sh " echo ${MIN_CATCH}"   
-          }  
-        }
-        stage('Deploying and configuring cronjob'){
-          steps {
+         }
+         steps {
+            // Do something with the inputs here\
             echo "Hello ${HOSTNAME_CATCH}"
               script {
                 try {
@@ -73,35 +59,33 @@ pipeline {
                     '''
                 }
               }
-          }  
-        }    
+         }  
+      }
       
-
-        
-        stage('Starting Build and Deployment') {
-          steps {
-            script {
-              try {
-                sh '''
+    stage('Starting Build and Deployment') {
+      steps {
+        script {
+          try {
+            sh '''
                   oc project $DEPLOY_PROJECT
                   oc get cronjob host-job
                   kubectl patch cronjob my-cronjob -p '{"spec":{"schedule": "*/${MIN_CATCH} * * * *"}}'
                 '''
-              }
-              catch ( Exception e ) {
-                sh '''
+          }
+          catch ( Exception e ) {
+            sh '''
                   oc project $DEPLOY_PROJECT
                   oc create -f cronjob.yaml 
                   '''
-              }
-            }    
           }
-        } 
-        stage('All Done'){
-          steps {
-             sh ' echo Your Pipeline is finished executing. Check the cronjob in $DEPLOY_PROJECT and jobs will be created from it.'
-          }
-        }
-
+        }    
+      }
+    } 
+    stage('All Done'){
+      steps {
+        sh ' echo Your Pipeline is finished executing. Check the cronjob in $DEPLOY_PROJECT and jobs will be created from it.'
+      }
     }
+  
+  }
 } 
