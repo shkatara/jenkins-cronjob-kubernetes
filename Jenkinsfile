@@ -13,7 +13,7 @@ pipeline {
     }
 
     stages {
-        stage('Prompt for Inputs'){
+        stage('Prompt for Inputs of HOSTNAME'){
           input {
             message "Please enter the hostname"
             ok "Yes, enter the hostname"
@@ -21,13 +21,17 @@ pipeline {
               string(name: 'HOSTNAME_CATCH',defaultValue: '', description: '')
             }
           }
+        }
+        stage('Prompt for Inputs of PORT'){
           input {
             message "Please enter the port number"
             ok "Yes, enter the port number"
             parameters {
               string(name: 'PORT_CATCH',defaultValue: '', description: '')
             }
-          }    
+          }
+        }
+        stage('Prompt for Inputs of Minutes'){
           input {
             message "Please enter the frequency"
             ok "Yes, enter the frequency"
@@ -35,6 +39,8 @@ pipeline {
               string(name: 'MIN_CATCH',defaultValue: '', description: '')
             }
           }
+        }
+        stage('Deploying and configuring cronjob'){
           steps {
             echo "Hello ${HOSTNAME_CATCH}"
               script {
