@@ -64,7 +64,7 @@ pipeline {
             sh '''
                   oc project $DEPLOY_PROJECT
                   oc get cronjob host-job
-                  oc patch cronjob/host-job -p '{"spec":{"schedule": "*/15 * * * *"}}'
+                  oc patch cronjob/host-job -p '{"spec":{"schedule": "*//${MIN_CATCH} * * * *"}}'
                 '''
           }
           catch ( Exception e ) {
