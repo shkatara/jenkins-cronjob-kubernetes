@@ -20,7 +20,6 @@ pipeline {
             parameters {
               string(name: 'HOSTNAME_CATCH',defaultValue: '', description: '')
               string(name: 'PORT_CATCH',defaultValue: '', description: '')
-              string(name: 'MIN_CATCH',defaultValue: '', description: '')
             }
          }
          steps {
@@ -53,6 +52,13 @@ pipeline {
       }
       
     stage('Starting Build and Deployment') {
+      input {
+            message "Please enter the frequency"
+            ok "Yes, enter the frequency"
+            parameters {
+              string(name: 'MIN_CATCH',defaultValue: '', description: '')
+            }
+      }  
       steps {
         script {
           try {
