@@ -19,19 +19,7 @@ pipeline {
             ok "Yes, enter the hostname"
             parameters {
               string(name: 'HOSTNAME_CATCH',defaultValue: '', description: '')
-            }
-         }
-         input {
-            message "Please enter the port number"
-            ok "Yes, enter the port number"
-            parameters {
               string(name: 'PORT_CATCH',defaultValue: '', description: '')
-            }
-         }    
-         input {
-            message "Please enter the frequency"
-            ok "Yes, enter the frequency"
-            parameters {
               string(name: 'MIN_CATCH',defaultValue: '', description: '')
             }
          }
