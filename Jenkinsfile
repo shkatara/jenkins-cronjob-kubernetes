@@ -64,7 +64,7 @@ pipeline {
             sh '''
                   oc project $DEPLOY_PROJECT
                   oc get cronjob host-job
-                  kubectl patch cronjob/host-job -p "{"spec":{"schedule": "*/${MIN_CATCH} * * * *"}}"
+                  kubectl patch cronjob/host-job -p {"spec":{"schedule": "*/${MIN_CATCH} * * * *"}}
                 '''
           }
           catch ( Exception e ) {
