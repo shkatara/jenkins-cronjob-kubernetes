@@ -13,13 +13,24 @@ pipeline {
     }
 
     stages {
- 
         stage('Prompt for Inputs'){
           input {
             message "Please enter the hostname"
             ok "Yes, enter the hostname"
             parameters {
               string(name: 'HOSTNAME_CATCH',defaultValue: '', description: '')
+            }
+          input {
+            message "Please enter the port number"
+            ok "Yes, enter the port number"
+            parameters {
+              string(name: 'PORT_CATCH',defaultValue: '', description: '')
+            }
+          input {
+            message "Please enter the frequency"
+            ok "Yes, enter the frequency"
+            parameters {
+              string(name: 'MIN_CATCH',defaultValue: '', description: '')
             }
           }
           steps {
@@ -30,15 +41,18 @@ pipeline {
                     oc project $DEPLOY_PROJECT
                     oc get cm myconfig
                     oldHost=$(oc get cm myconfig -o yaml | yq e '.data.HOST' -)
+                    oldPort=$(oc get cm myconfig -o yaml | yq e '.data.PORT' -)
                     echo old host is $oldHost
+                    echo old port is $oldPost
                     echo new host is "${HOSTNAME_CATCH}"
-                    oc get configmap myconfig -o yaml |  sed  "s/$oldHost/${HOSTNAME_CATCH}/g" | oc replace -f -
+                    echo new host is "${PORT_CATCH}"
+                    oc get configmap myconfig -o yaml |  sed  "s/$oldHost/${HOSTNAME_CATCH}/g" | sed "s/$oldPort/${PORT_CATCH}/g" |oc replace -f -
                   '''
                 }
                 catch (Exception e) {
                     sh '''
                     oc project $DEPLOY_PROJECT
-                    oc create configmap myconfig --from-literal=HOST=${HOSTNAME_CATCH}
+                    oc create configmap myconfig --from-literal=HOST=${HOSTNAME_CATCH} --from-literal=PORT=${PORT_CATCH}
                     '''
                 }
               }
@@ -54,6 +68,7 @@ pipeline {
                 sh '''
                   oc project $DEPLOY_PROJECT
                   oc get cronjob host-job
+                  kubectl patch cronjob my-cronjob -p '{"spec":{"schedule": "*/${MIN_CATCH} * * * *"}}'
                 '''
               }
               catch ( Exception e ) {
