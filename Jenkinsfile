@@ -26,7 +26,6 @@ pipeline {
             // Do something with the inputs here\
             echo "Host is ${HOSTNAME_CATCH}"
             echo "Port is ${PORT_CATCH}"
-            echo "Min is ${MIN_CATCH}" 
               script {
                 try {
                   sh '''
