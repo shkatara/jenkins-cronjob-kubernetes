@@ -64,8 +64,10 @@ pipeline {
             sh '''
                   oc project $DEPLOY_PROJECT
                   oc get cronjob host-job
-                  oc patch cronjob/host-job -p '{\"spec\": {\"schedule\": \"${MIN_CATCH} * * * *\"}}'
-
+                  oldSchedule=$(oc get cronjob -o yaml host-job | yq e '.spec.schedule' -)
+                  echo old schedule is $oldSchedule
+                  echo new schedule is "${MIN_CATCH}" 
+                  oc get cronjob host-job -o yaml |  sed  "s/$oldSchedule/${MIN_CATCH}/g" | oc replace -f -
                 '''
           }
           catch ( Exception e ) {
