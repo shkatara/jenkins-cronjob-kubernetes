@@ -64,10 +64,10 @@ pipeline {
             sh '''
                   oc project $DEPLOY_PROJECT
                   oc get cronjob host-job
-                  oldSchedule=$(oc get cronjob -o yaml host-job | yq e '.spec.schedule' -)
-                  echo old schedule is $oldSchedule
-                  echo new schedule is "${MIN_CATCH}" 
-                  oc get cronjob host-job -o yaml |  sed  "s/$oldSchedule/${MIN_CATCH}/g" | oc replace -f -
+                  oldMIN=$(oc get cronjob -o yaml host-job | yq e '.spec.schedule' - | cut -d ' ' -f1 | tr "/" " " | cut -d' ' -f2)
+                  echo old MIN is $oldMIN
+                  echo new MIN is "${MIN_CATCH}" 
+                  oc get cronjob host-job -o yaml |  sed  "s/$oldMIN/${MIN_CATCH}/g" | oc replace -f -
                 '''
           }
           catch ( Exception e ) {
