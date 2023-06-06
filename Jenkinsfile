@@ -3,15 +3,7 @@ pipeline {
         // set a timeout of 30 minutes for this pipeline
         timeout(time: 30, unit: 'MINUTES')
     }
-    agent {
-      node {
-             label 'master'
-      }
-    }
-    environment {
-      DEPLOY_PROJECT = "jenkins-cron-deploy"
-    }
-
+    
     stages {
       stage('Starting Build and Deployment') {  
         steps {
