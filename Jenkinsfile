@@ -3,7 +3,11 @@ pipeline {
         // set a timeout of 30 minutes for this pipeline
         timeout(time: 30, unit: 'MINUTES')
     }
-    
+    agent {
+      node {
+             label 'master'
+      }
+    }
     stages {
       stage('Starting Build and Deployment') {  
         steps {
